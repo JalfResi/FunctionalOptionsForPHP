@@ -46,7 +46,9 @@ class Server implements IAddressable, IConnectable
     {
         if (count($options)>0) {
             foreach($options as $opt) {
-                $opt($this);
+                if (is_callable($opt)) {
+                    $opt($this);
+                }
             }
         }
     }
