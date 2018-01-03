@@ -47,7 +47,13 @@ class Server implements IAddressable, IConnectable
         if (count($options)>0) {
             foreach($options as $opt) {
                 if (is_callable($opt)) {
-                    $opt($this);
+                    $rf = new \ReflectionFunction($opt);
+                    $rp = $rf->getParameters();
+                    $rc = $rp[0]->getClass();
+
+                    if ($this instanceof $rc->name) {
+                        $opt($this);
+                    }
                 }
             }
         }

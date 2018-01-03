@@ -74,5 +74,31 @@ $person = new Employee(
 
 The original approach in Go relies on a Function Type to ensure type safety of the
 retuned function. The closest we can do is to rely on the return type hinting 
-properties of PHP7 to ensure the returned function is callable. however this 
+properties of PHP7 to ensure the returned function is callable. However this 
 does not ensure that returned function accepts the target object as an argument.
+
+Ideally, this problem could be solved with the introduction of Callable Prototypes
+[PHP RFC](https://why-cant-we-have-nice-things.mwl.be/requests/callable-types).
+However it appears that this particular RFC has been rejected.
+
+It could be possibible to implement type checking of the first argument of the
+returned callable in the constructor using refelction, like so:
+
+```php
+public function __construct(callable ...$options)
+{
+    if (count($options)>0) {
+        foreach($options as $opt) {
+            if (is_callable($opt)) {
+                $rf = new \ReflectionFunction($opt);
+                $rp = $rf->getParameters();
+                $rc = $rp[0]->getClass();
+
+                if ($this instanceof $rc->name) {
+                    $opt($this);
+                }
+            }
+        }
+    }
+}
+```
