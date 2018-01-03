@@ -81,8 +81,8 @@ Ideally, this problem could be solved with the introduction of Callable Prototyp
 [PHP RFC](https://why-cant-we-have-nice-things.mwl.be/requests/callable-types).
 However it appears that this particular RFC has been rejected.
 
-It could be possibible to implement type checking of the first argument of the
-returned callable in the constructor using refelction, like so:
+It could be possible to implement type checking of the first argument of the
+returned callable in the constructor using reflection, like so:
 
 ```php
 public function __construct(callable ...$options)
